@@ -14,14 +14,15 @@ app.use(
   cors({
     origin: ["http://localhost:3000", "https://gadget-swap-frontend.vercel.app"],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   }),
 );
 
 // Auth Middleware
 const verifyUser = (req, res, next) => {
-  const session = req.cookies?.user_session;
-  if (!session) {
+  const sessionHeader = req.headers.authorization; 
+  if (!sessionHeader) {
     return res.status(401).send({ message: "Unauthorized! Please login." });
   }
   next();
